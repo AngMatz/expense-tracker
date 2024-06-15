@@ -1,0 +1,61 @@
+.headerImage{
+    height: 25px;
+    width: 85px;
+    margin-top: 5px;
+    margin-left: 12px;
+}
+
+.wrapper{
+    margin: 3px 12px;
+    background-color: #3B3B3B;
+    max-width: 1256px;
+    height: 781px;
+    border-radius: 3px;
+}
+
+.heading{
+    color: white;
+    font-family: 'ubuntu', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-left: 1rem;
+    padding-top: 1rem;
+}
+
+.top-section-wrapper{
+margin: 5px 1rem 1.5rem 1rem;
+background-color: #626262;
+max-width: 1211px;
+height: 269px;
+border-radius: 10px;
+display: flex;
+justify-content: space-around;
+align-items: center;
+}
+
+.bottom-section-wrapper{
+margin: 5px 1rem 1.5rem 1rem;
+max-width: 1185px;
+height: 380px;
+display: flex;
+justify-content: space-between;
+}
+
+.bottom-section-heading{
+color: white;
+font-family: 'ubuntu', sans-serif;
+font-weight: 700;
+font-size: 28px;
+font-style: italic;
+margin-top: 0;
+}
+
+.expense-list{
+width: 738px;
+height: 275px;
+border: 1px solid #9B9B9B;
+border-radius: 15px;
+background-color: white;
+margin-top: 10px;
+padding: 2rem;
+}

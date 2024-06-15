@@ -1,0 +1,39 @@
+.title{
+font-family: 'ubuntu', sans-serif;
+font-size: 30px;
+color: white;
+}
+
+.amount-green{
+    color: #9DFF5B;
+    font-weight: 700;
+}
+
+.amount-orange{
+    color: #F4BB4A;
+    font-weight: 700;
+}
+
+.button-green{
+    background: linear-gradient(90deg, #B5DC52 0%, #89E148 100%);
+    width: 167.65px;
+    height: 38px;
+    border-radius: 25px;
+    color: white;
+    font-family: 'ubuntu', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin-top: 1rem;
+}
+
+.button-red{
+    background: linear-gradient(90deg, #FF9595 0%, #FF4747 80%, #FF3838 100%);
+    width: 167.65px;
+    height: 38px;
+    border-radius: 25px;
+    color: white;
+    font-family: 'ubuntu', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin-top: 1rem;
+}

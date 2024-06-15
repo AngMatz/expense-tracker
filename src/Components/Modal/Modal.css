@@ -1,0 +1,104 @@
+.main-heading{
+    font-family: 'ubuntu', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: black;
+}
+
+.input-field{
+    border: 0;
+    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+    border-radius: 15px;
+    width: 223px;
+    height: 51px;
+    margin-right: 1rem;
+    margin-top: 25px;
+    -webkit-appearance: none;
+    color: rgba(0,0,0,0.75);
+    text-indent: 5px;
+}
+
+input::-webkit-calendar-picker-indicator{
+    display: none;
+}
+
+.add-expense-btn{
+    width: 223px;
+    height: 51px;
+    border-radius: 15px;
+    background-color: #F4BB4A;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+    margin-right: 1rem;
+    margin-top: 25px;
+}
+
+.add-expense-btn:hover{
+    background-color: #F4BB4A;
+}
+
+.cancel-btn{
+    width: 112px;
+    height: 51px;
+    border-radius: 15px;
+    background-color: #d9d9d9;
+    color: black;
+    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+    margin-top: 25px;
+}
+
+.cancel-btn:hover{
+    background-color: #d9d9d9;
+}
+
+.add-balance-btn{
+    width: 145px;
+    height: 51px;
+    border-radius: 15px;
+    background-color: #F4BB4A;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+    margin-right: 8px;
+}
+
+.add-balance-btn:hover{
+    background-color: #F4BB4A;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.add-balance-cancel-btn{
+    width: 112px;
+    height: 51px;
+    border-radius: 15px;
+    background-color: #d9d9d9;
+    color: black;
+    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+}
+
+.add-balance-cancel-btn:hover{
+    background-color: #d9d9d9;
+}
+
+.add-balance-input-field{
+    border: 0;
+    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+    border-radius: 15px;
+    width: 223px;
+    height: 51px;
+    margin-top: 25px;
+    -webkit-appearance: none;
+    color: rgba(0,0,0,0.75);
+    text-indent: 5px;
+    margin-right: 8px;
+}
