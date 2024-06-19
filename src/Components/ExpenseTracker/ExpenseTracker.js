@@ -3,7 +3,7 @@ import headerImage from "../Assets/headerImage.png";
 import { Box, Typography } from "@mui/material";
 import "./ExpenseTracker.css";
 import { useEffect, useState, useContext } from "react";
-import ExpenseWalletBalance from "../ExpenseWallerBalance/ExpenseWalletBalance.js";
+import ExpenseWalletBalance from "../ExpenseWallerBalanceDisplay/ExpenseWalletBalance.js";
 import ExpensePieChart from "../PieChart/PieChart.js";
 import ExpenseListItem from "../ExpenseList/ExpenseList.js";
 import Pagination from '../Pagination/Pagination.js';
@@ -64,7 +64,7 @@ return(
                         {expenseData ? (<>
                         {expenseDataOnCurrentPage.map((ele, index) => {
                             return(
-                                <ExpenseListItem name={ele.itemName} cost={ele.itemCost} date={ele.expenditureDate} category={ele.itemCategory} image={ele.image} id={index} key={index}/>
+                                <ExpenseListItem name={ele.itemName} cost={ele.itemCost} date={ele.expenditureDate} category={ele.itemCategory} image={ele.image} id={ele.itemID} key={ele.itemID}/>
                             )
                         })}
                          </>): <div></div>}

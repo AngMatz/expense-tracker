@@ -7,6 +7,7 @@ import Modal from '@mui/material/Modal';
 import "./Modal.css";
 import { ExpenseContext } from '../../App';
 import { useSnackbar } from 'notistack';
+import { v4 as uuidv4 } from 'uuid';
 
 
 const style = {
@@ -23,17 +24,18 @@ const style = {
   borderRadius: "15px",
 };
 
-
-
-export default function BasicModal({open, setOpen, title}) {  
+export default function BasicModal({open, setOpen, title, id}) {  
 
   const {enqueueSnackbar} = useSnackbar();
 
-  const { balance, expenditure, expenditureData} = useContext(ExpenseContext);
+  const { balance, expenditure, expenditureData, foodExpenseData, entertainmentExpenseData, travelExpenseData} = useContext(ExpenseContext);
 
   const [walletBalance, setWalletBalance] = balance;
   const [expenses, setExpenses] = expenditure;
   const [expenseData, setExpenseData] = expenditureData;
+  const [foodExpense, setFoodExpense] =  foodExpenseData;
+  const [entertainmentExpense, setEntertainmentExpense] = entertainmentExpenseData;
+  const [travelExpense, setTravelExpense] =  travelExpenseData;
  
  
   const [incomeAmount, setIncomeAmount] = useState("");
@@ -41,9 +43,7 @@ export default function BasicModal({open, setOpen, title}) {
   const [price, setPrice] = useState("");
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("");
-  const [foodExpense, setFoodExpense] = useState(0);
-  const [entertainmentExpense, setEntertainmentExpense] = useState(0);
-  const [travelExpense, setTravelExpense] = useState(0);
+ 
   
 
   const handleClose = () => setOpen(false);
@@ -83,7 +83,7 @@ export default function BasicModal({open, setOpen, title}) {
 
     const handleAddExpense = (e) => {
         e.preventDefault();
-
+  
         if(expenseTitle.length === 0){
           enqueueSnackbar("Title is a required field.", {variant: "warning"});
           return;
@@ -103,21 +103,28 @@ export default function BasicModal({open, setOpen, title}) {
             }else{
               setExpenses((amount) => parseInt(amount) + parseInt(price));
               localStorage.setItem("totalExpense", JSON.stringify(totalExpense));
+              let totalWalletBalance = 5000 - parseInt(totalExpense);
+              setWalletBalance(totalWalletBalance);
+              localStorage.setItem("totalWalletBalance", JSON.stringify(totalWalletBalance));
               setOpen(false);
             }
-            
-          const formattedDate = new Date(date).toLocaleDateString("en-GB", {day:"numeric", month: "long", year: "numeric"});
-
-
-          if(expenseData){
-            setExpenseData([...expenseData, {itemName: expenseTitle, itemCost: price, itemCategory: category, expenditureDate: formattedDate, image: null}]);  
+          
+            const formattedDate = new Date(date).toLocaleDateString("en-GB", {day:"numeric", month: "long", year: "numeric"});
+            const dateArray = formattedDate.split(" ");
+            const dayOfMonth = dateArray[0];
+            const month = dateArray[1];
+            const year = dateArray[2];
+      
+          
+          if(expenseData.length>0){ 
+            const newExpenseData = {itemName: expenseTitle, itemCost: price, itemCategory: category, expenditureDate: `${month} ${dayOfMonth}, ${year}`, image: null, itemID: uuidv4()};
+            setExpenseData([...expenseData, newExpenseData]);  
           }else{
-            setExpenseData([{itemName: expenseTitle, itemCost: price, itemCategory: category, expenditureData: formattedDate, image: null}]);
+            setExpenseData([{itemName: expenseTitle, itemCost: price, itemCategory: category, expenditureDate: `${month} ${dayOfMonth}, ${year}`, image: null, itemID: uuidv4()}]);
           }
   
           localStorage.setItem("expenseData", JSON.stringify(expenseData));   
 
-          
           
           if(category === "food"){
             const pastFoodExpense = JSON.parse(localStorage.getItem("foodExpense"));
@@ -140,7 +147,7 @@ export default function BasicModal({open, setOpen, title}) {
               localStorage.setItem("entertainmentExpense", JSON.stringify(moneyOnEntertainment));
             }else{
               let moneyOnEntertainment = parseInt(entertainmentExpense) + parseInt(price);
-              setFoodExpense(moneyOnEntertainment);
+              setEntertainmentExpense(moneyOnEntertainment);
               localStorage.setItem("entertainmentExpense", JSON.stringify(moneyOnEntertainment));
             }
 
@@ -152,13 +159,108 @@ export default function BasicModal({open, setOpen, title}) {
               localStorage.setItem("travelExpense", JSON.stringify(moneyOnTravel));
             }else{
               let moneyOnTravel = parseInt(travelExpense) + parseInt(price);
-              setFoodExpense(moneyOnTravel);
+              setTravelExpense(moneyOnTravel);
               localStorage.setItem("travelExpense", JSON.stringify(moneyOnTravel));
             }
            }
         }
+    }
+
+    const handleEditExpense = (e, id) => {
+      e.preventDefault();
+
+      if(expenseTitle.length === 0){
+        enqueueSnackbar("Title is a required field.", {variant: "warning"});
+        return;
+      }else if(price.length === 0){
+        enqueueSnackbar("Price is a required field.", {variant: "warning"});
+        return;
+      }else if(category.length === 0){
+        enqueueSnackbar("Category is a required field.", {variant: "warning"});
+        return;
+      }else if(date.length === 0){
+        enqueueSnackbar("Date is a required field.", {variant: "warning"});
+        return;
+      }else{
+
+      const oldListItem = expenseData.find((ele) => ele.itemID === id);
+      const oldListItemExpense = oldListItem.itemCost;
+      const oldListItemCategory = oldListItem.itemCategory;
+
+
+      if(oldListItemCategory === "food"){
+        const foodExpenseFromLocalStor = JSON.parse(localStorage.getItem("foodExpense"));
+        const expenseOnFood = parseInt(foodExpenseFromLocalStor) - parseInt(oldListItemExpense);
+        setFoodExpense(expenseOnFood);
+        localStorage.setItem("foodExpense", JSON.stringify(expenseOnFood));
+      } else if(oldListItemCategory === "entertainment"){
+        const entertainmentExpenseFromLocalStor = JSON.parse(localStorage.getItem("entertainmentExpense"));
+        const expenseOnEntertainment = parseInt(entertainmentExpenseFromLocalStor) - parseInt(oldListItemExpense);
+        setEntertainmentExpense(expenseOnEntertainment);
+        localStorage.setItem("entertainmentExpense", JSON.stringify(expenseOnEntertainment));
+      } else if(oldListItemCategory === "travel"){
+        const travelExpenseFromLocalStor = JSON.parse(localStorage.getItem("travelExpense"));
+        const expenseOnTravel = parseInt(travelExpenseFromLocalStor) - parseInt(oldListItemExpense);
+        setTravelExpense(expenseOnTravel);
+        localStorage.setItem("travelExpense", JSON.stringify(expenseOnTravel));
       }
-    
+
+      const newExpenseList = expenseData.map((ele) => {
+        if (ele.itemID === id){
+          
+        const formattedDate = new Date(date).toLocaleDateString("en-GB", {day:"numeric", month: "long", year: "numeric"});
+        const dateArray = formattedDate.split(" ");
+        const dayOfMonth = dateArray[0];
+        const month = dateArray[1];
+        const year = dateArray[2];
+
+          const updatedListItem = {
+            itemName: expenseTitle,
+            itemCost: price,
+            itemCategory: category,
+            expenditureDate: `${month} ${dayOfMonth}, ${year}`,
+            image: null, 
+            itemID: uuidv4()
+          }
+
+          const totalExpenseFromLocalStor = JSON.parse(localStorage.getItem("totalExpense"));
+          const totalNewExpense = parseInt(totalExpenseFromLocalStor) - parseInt(oldListItemExpense) + parseInt(updatedListItem.itemCost);
+          setExpenses(totalNewExpense);
+          localStorage.setItem("totalExpense", JSON.stringify(totalNewExpense));
+
+          const walletBalanceFromLocalStor = JSON.parse(localStorage.getItem("totalWalletBalance"));
+          const totalNewWalletBalance = parseInt(walletBalanceFromLocalStor) + parseInt(oldListItemExpense) - parseInt(updatedListItem.itemCost);
+          setWalletBalance(totalNewWalletBalance);
+          localStorage.setItem("totalWalletBalance", JSON.stringify(totalNewWalletBalance));
+          
+          
+       if(updatedListItem.itemCategory === "food"){
+        const pastFoodExpense = JSON.parse(localStorage.getItem("foodExpense")) || 0;
+        let moneyOnFood = parseInt(pastFoodExpense) + parseInt(updatedListItem.itemCost); 
+        setFoodExpense(moneyOnFood);
+        localStorage.setItem("foodExpense", JSON.stringify(moneyOnFood));
+      }else if(updatedListItem.itemCategory === "entertainment"){
+        const pastEntertainmentExpense = JSON.parse(localStorage.getItem("entertainmentExpense")) || 0;
+        let moneyOnEntertainment = parseInt(pastEntertainmentExpense) + parseInt(updatedListItem.itemCost); 
+        setEntertainmentExpense(moneyOnEntertainment);
+        localStorage.setItem("entertainmentExpense", JSON.stringify(moneyOnEntertainment));
+      } else if (updatedListItem.itemCategory === "travel"){
+        const pastTravelExpense = JSON.parse(localStorage.getItem("travelExpense")) || 0;    
+        let moneyOnTravel = parseInt(pastTravelExpense) + parseInt(updatedListItem.itemCost); 
+        setTravelExpense(moneyOnTravel);
+        localStorage.setItem("travelExpense", JSON.stringify(moneyOnTravel));
+      }
+          
+          return updatedListItem;
+        }
+        return ele;
+      });
+
+      setExpenseData(newExpenseList);
+      localStorage.setItem("expenseData", JSON.stringify(expenseData));
+    }
+  }
+
   return (
     <div>
         {title === "Wallet Balance" ? <>
@@ -186,7 +288,7 @@ export default function BasicModal({open, setOpen, title}) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-            <Typography className="main-heading">Add Expenses</Typography>
+            <Typography className="main-heading">{title==="Expenses" ? "Add Expenses" : "Edit Expenses"}</Typography>
             <form>
             <input className="input-field" type="text" name="expense-title" value={expenseTitle} placeholder="Title" required onChange={(e)=>handleExpenseTitleChange(e)}/>
             <input className="input-field" type="text" name="price" value={price} placeholder="Price" required onChange={(e)=>handlePriceChange(e)}/>
@@ -197,7 +299,7 @@ export default function BasicModal({open, setOpen, title}) {
                 <option value="travel">Travel</option>
             </select>
             <input className="input-field" type="date" name="date" value={date} required onChange={(e)=>handleDateChange(e)}/>
-            <Button type="submit" className="add-expense-btn" onClick={(e) => handleAddExpense(e)}>Add Expense</Button>
+            <Button type="submit" className="add-expense-btn" onClick={ title==="Expenses" ? (e) => handleAddExpense(e) : (e) => handleEditExpense(e, id)}>Add Expense</Button>
             <Button type="button" className="cancel-btn" onClick={handleClose}>Cancel</Button>
             </form>
         </Box>

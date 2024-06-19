@@ -13,6 +13,9 @@ export default function Pagination({itemsPerPage, currentPageNumber, setCurrentP
     for(let i=1; i<=Math.ceil(expenseData.length/itemsPerPage); i++){
         totalPages.push(i);
     }
+    }else{
+        totalPages.push(1);
+        setCurrentPageNumber(1);
     }
 
     const handlePrev = () => { 
@@ -24,7 +27,9 @@ export default function Pagination({itemsPerPage, currentPageNumber, setCurrentP
     }
 
     const handleNext = () => {
-        if(currentPageNumber<totalPages.length){
+        if(expenseData.length===0){
+            setCurrentPageNumber(1);
+        }else if(currentPageNumber<totalPages.length){
             setCurrentPageNumber(currentPageNumber + 1);
         }else{
             setCurrentPageNumber(totalPages.length);
