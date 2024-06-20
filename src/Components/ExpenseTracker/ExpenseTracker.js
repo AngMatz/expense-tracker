@@ -12,18 +12,21 @@ import { ExpenseContext } from "../../App.js";
 import foodIcon from "../Assets/food.png";
 import movieIcon from "../Assets/movie.png";
 import autoIcon from "../Assets/travel.png";
+import BarChartOfExpenses from "../BarChart/BarChart.js";
+import Container from '@mui/material/Container';
 
 
 
 export default function ExpenseTracker(){
     const [currentPageNumber, setCurrentPageNumber] = useState(1);
     const [expenseDataOnCurrentPage, setExpenseDataOnCurrentPage] = useState([])
-    const [itemsPerPage] = useState(3);
+    const itemsPerPage = 3;
+    
     
     const { expenditureData } = useContext(ExpenseContext);
     const [expenseData] = expenditureData;
 
-
+  
     useEffect(() => { 
             localStorage.setItem("expenseData", JSON.stringify(expenseData));
           if(expenseData){
@@ -46,6 +49,7 @@ export default function ExpenseTracker(){
    
   
 return(
+    <Container maxWidth="xl">
     <Box>
         <img src={headerImage} className="headerImage" alt="headerImage" />
         <Box className="wrapper">
@@ -67,17 +71,21 @@ return(
                                 <ExpenseListItem name={ele.itemName} cost={ele.itemCost} date={ele.expenditureDate} category={ele.itemCategory} image={ele.image} id={ele.itemID} key={ele.itemID}/>
                             )
                         })}
+                        <Box sx={{display: "flex", justifyContent: "center", alignItems: "center", position: "absolute", top: "725px", left: "350px"}}>
+                            <Pagination itemsPerPage={itemsPerPage} currentPageNumber={currentPageNumber} setCurrentPageNumber={setCurrentPageNumber}/>
+                        </Box>
                          </>): <div></div>}
                     </Box>
-                    <Stack spacing={2} sx={{position:"absolute", top: "725px", left: "350px"}}>
-                        <Pagination itemsPerPage={itemsPerPage} currentPageNumber={currentPageNumber} setCurrentPageNumber={setCurrentPageNumber}/>
-                    </Stack>
                 </Box>
                 <Box>
-                    <Typography variant="h4" className="bottom-section-heading">Top Expenses</Typography>
+                    <Typography variant="h4" className="bottom-section-heading" sx={{marginLeft: "20px"}}>Top Expenses</Typography>
+                    <Box className= "barChartWrapper" sx={{height: "345px", width: "417px", backgroundColor: "white"}}>
+                        <BarChartOfExpenses />
+                    </Box>
                 </Box>
             </Box>
         </Box>
     </Box>
+</Container>
 )
 }

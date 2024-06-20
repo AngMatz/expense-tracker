@@ -8,7 +8,7 @@
 .wrapper{
     margin: 3px 12px;
     background-color: #3B3B3B;
-    max-width: 1256px;
+    width: 1256px;
     height: 781px;
     border-radius: 3px;
 }
@@ -51,11 +51,20 @@ margin-top: 0;
 }
 
 .expense-list{
-width: 738px;
-height: 275px;
+width: 700px;
+height: 300px;
 border: 1px solid #9B9B9B;
 border-radius: 15px;
 background-color: white;
 margin-top: 10px;
 padding: 2rem;
+}
+
+.barChartWrapper{
+height: 365px;
+width: 417px;
+background-color: white;
+margin-left: 20px;
+margin-top: 10px;
+border-radius: 15px;
 }

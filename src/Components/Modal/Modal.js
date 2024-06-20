@@ -83,6 +83,8 @@ export default function BasicModal({open, setOpen, title, id}) {
 
     const handleAddExpense = (e) => {
         e.preventDefault();
+
+        //validation check
   
         if(expenseTitle.length === 0){
           enqueueSnackbar("Title is a required field.", {variant: "warning"});
@@ -97,6 +99,7 @@ export default function BasicModal({open, setOpen, title, id}) {
           enqueueSnackbar("Date is a required field.", {variant: "warning"});
           return;
         }else{
+          //update expenses and wallet balance if validation checks are okay
             let totalExpense = parseInt(expenses) + parseInt(price);
             if(totalExpense>walletBalance){
               enqueueSnackbar("Wallet balance is low. Please add wallet balance to proceed with the transaction.", {variant: "error"})
@@ -109,13 +112,14 @@ export default function BasicModal({open, setOpen, title, id}) {
               setOpen(false);
             }
           
+            //change date format to the required format
             const formattedDate = new Date(date).toLocaleDateString("en-GB", {day:"numeric", month: "long", year: "numeric"});
             const dateArray = formattedDate.split(" ");
             const dayOfMonth = dateArray[0];
             const month = dateArray[1];
             const year = dateArray[2];
       
-          
+          //update expenseData if expenseData is available
           if(expenseData.length>0){ 
             const newExpenseData = {itemName: expenseTitle, itemCost: price, itemCategory: category, expenditureDate: `${month} ${dayOfMonth}, ${year}`, image: null, itemID: uuidv4()};
             setExpenseData([...expenseData, newExpenseData]);  
@@ -125,7 +129,7 @@ export default function BasicModal({open, setOpen, title, id}) {
   
           localStorage.setItem("expenseData", JSON.stringify(expenseData));   
 
-          
+          //update foodExpense or entertainmentExpense or travelExpense as per the expenseData added
           if(category === "food"){
             const pastFoodExpense = JSON.parse(localStorage.getItem("foodExpense"));
             if(pastFoodExpense){
@@ -137,8 +141,6 @@ export default function BasicModal({open, setOpen, title, id}) {
               setFoodExpense(moneyOnFood);
               localStorage.setItem("foodExpense", JSON.stringify(moneyOnFood));
             }
-            
-
            } else if(category === "entertainment"){
             const pastEntertainmentExpense = JSON.parse(localStorage.getItem("entertainmentExpense"));
             if(pastEntertainmentExpense){
@@ -150,7 +152,6 @@ export default function BasicModal({open, setOpen, title, id}) {
               setEntertainmentExpense(moneyOnEntertainment);
               localStorage.setItem("entertainmentExpense", JSON.stringify(moneyOnEntertainment));
             }
-
            } else if (category === "travel"){
             const pastTravelExpense = JSON.parse(localStorage.getItem("travelExpense"));
             if(pastTravelExpense){
@@ -169,6 +170,7 @@ export default function BasicModal({open, setOpen, title, id}) {
     const handleEditExpense = (e, id) => {
       e.preventDefault();
 
+      //validation checks
       if(expenseTitle.length === 0){
         enqueueSnackbar("Title is a required field.", {variant: "warning"});
         return;
@@ -182,7 +184,7 @@ export default function BasicModal({open, setOpen, title, id}) {
         enqueueSnackbar("Date is a required field.", {variant: "warning"});
         return;
       }else{
-
+        //get the oldListItem and deduct the foodExpense or entertainmentExpense or travelExpense as per the category of the oldListItem
       const oldListItem = expenseData.find((ele) => ele.itemID === id);
       const oldListItemExpense = oldListItem.itemCost;
       const oldListItemCategory = oldListItem.itemCategory;
@@ -205,9 +207,11 @@ export default function BasicModal({open, setOpen, title, id}) {
         localStorage.setItem("travelExpense", JSON.stringify(expenseOnTravel));
       }
 
+      //get the updatedExpenseList
       const newExpenseList = expenseData.map((ele) => {
         if (ele.itemID === id){
-          
+        
+      //change the date format of the updatedListItem
         const formattedDate = new Date(date).toLocaleDateString("en-GB", {day:"numeric", month: "long", year: "numeric"});
         const dateArray = formattedDate.split(" ");
         const dayOfMonth = dateArray[0];
@@ -222,6 +226,8 @@ export default function BasicModal({open, setOpen, title, id}) {
             image: null, 
             itemID: uuidv4()
           }
+        
+          //update the expenses and wallet balance based on the updatedListItem
 
           const totalExpenseFromLocalStor = JSON.parse(localStorage.getItem("totalExpense"));
           const totalNewExpense = parseInt(totalExpenseFromLocalStor) - parseInt(oldListItemExpense) + parseInt(updatedListItem.itemCost);
@@ -233,7 +239,7 @@ export default function BasicModal({open, setOpen, title, id}) {
           setWalletBalance(totalNewWalletBalance);
           localStorage.setItem("totalWalletBalance", JSON.stringify(totalNewWalletBalance));
           
-          
+      //update the foodExpense or travelExpense or entertainmentExpense based on the category of the updatedListItem
        if(updatedListItem.itemCategory === "food"){
         const pastFoodExpense = JSON.parse(localStorage.getItem("foodExpense")) || 0;
         let moneyOnFood = parseInt(pastFoodExpense) + parseInt(updatedListItem.itemCost); 
@@ -256,6 +262,7 @@ export default function BasicModal({open, setOpen, title, id}) {
         return ele;
       });
 
+      // set the updatedListItem to the expenseData and localStorage
       setExpenseData(newExpenseList);
       localStorage.setItem("expenseData", JSON.stringify(expenseData));
     }

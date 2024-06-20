@@ -41,7 +41,7 @@ export default function Pagination({itemsPerPage, currentPageNumber, setCurrentP
     }
     
     return(
-        <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+        <div style={{display: "flex", alignItems: "center", justifyContent: "center" }}>
             <button className="arrow-button" onClick={handlePrev}> <img src={LeftArrow} height="24px" width="24px" alt="previous-icon" /> </button>
             <button className="button" onClick={(e) => {handleClick(e)}}> {currentPageNumber} </button>
             <button className="arrow-button" onClick={handleNext}> <img src={RightArrow} height="24px" width="24px" alt="previous-icon" /> </button>

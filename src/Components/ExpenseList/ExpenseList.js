@@ -23,13 +23,15 @@ export default function ExpenseListItem({name, cost, date, category, image, id})
     }
 
     const handleDelete = () => {
-
+        
         const listItemToDelete = expenseData.find((ele) => ele.itemID === id);
 
+        // update the expense list post delete
         const updatedListPostDelete = expenseData.filter((ele) => ele.itemID !== id);
         setExpenseData(updatedListPostDelete);
         localStorage.setItem("expenseData", JSON.stringify(expenseData));
 
+        // update the expenses and wallet balance post delete of expense list item
           const totalExpenseFromLocalStor = JSON.parse(localStorage.getItem("totalExpense"));
           const totalNewExpense = parseInt(totalExpenseFromLocalStor) - parseInt(listItemToDelete.itemCost);
           setExpenses(totalNewExpense);
@@ -40,7 +42,7 @@ export default function ExpenseListItem({name, cost, date, category, image, id})
           setWalletBalance(totalNewWalletBalance);
           localStorage.setItem("totalWalletBalance", JSON.stringify(totalNewWalletBalance));
           
-
+          //update foodExpense or entertainmentExpense or travelExpense based on the category of the deleted list item
           if(listItemToDelete.itemCategory === "food"){
             const pastFoodExpense = JSON.parse(localStorage.getItem("foodExpense")) || 0;
             let moneyOnFood = parseInt(pastFoodExpense) - parseInt(listItemToDelete.itemCost); 
